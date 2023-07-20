@@ -21,8 +21,8 @@ class BarcodeCreator
     );
 
     private int $imgHeight; // Height of the barcode image
-    private int $thinLine = 2;  // Width of thin lines
-    private int $thickLine = 6; // Width of thick lines
+    private float $thinLine = 2;  // Width of thin lines
+    private float $thickLine = 6; // Width of thick lines
 	
     /**
      * BarcodeCreator constructor.
@@ -31,6 +31,9 @@ class BarcodeCreator
      */
 	public function __construct(int $imageHeight = 50) {
 		$this->imgHeight = $imageHeight;
+		$scaleFactor = $imageHeight / 30;
+		$thinLine *= $scaleFactor;
+		$thickLine *= $scaleFactor;
 	}
 
     /**
@@ -98,13 +101,19 @@ class BarcodeCreator
         for ($i = 0; $i < $barcodeLength; $i++) {
             $imgWidth += $barcode[$i] == '0' ? $this->thinLine : $this->thickLine;
         }
+		
+		$padding = 0.05 * $imgWidth; // Padding on both sides
+		$imgWidth += 2 * $padding; // Adjust the total width of the image including padding
+
 
         $img = imagecreate($imgWidth, $this->imgHeight);
 
         $black = imagecolorallocate($img, 0, 0, 0);  // Color for the barcode lines
         $white = imagecolorallocate($img, 255, 255, 255);  // Background color
+		
+		imagefilledrectangle($img, 0, 0, $imgWidth, $this->imgHeight, $white);
 
-        $xPos = 0;
+        $xPos = $padding;
         for ($i = 0; $i < $barcodeLength; $i++) {
 
             $lineWeight = $barcode[$i] == '0' ? $this->thinLine : $this->thickLine;
