@@ -32,8 +32,8 @@ class BarcodeCreator
 	public function __construct(int $imageHeight = 50) {
 		$this->imgHeight = $imageHeight;
 		$scaleFactor = $imageHeight / 30;
-		$thinLine *= $scaleFactor;
-		$thickLine *= $scaleFactor;
+		$this->thinLine *= $scaleFactor;
+		$this->thickLine = $this->thinLine*2.5;
 	}
 
     /**
