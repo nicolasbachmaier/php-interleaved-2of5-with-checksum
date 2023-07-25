@@ -1,4 +1,13 @@
 <?php
+/**
+ * Class Code128Creator
+ *
+ * This class generates a Code128 Barcode with an additional Interleaved 2/5 Checksum (+Code128 Checksum)
+ * The barcode can be output as an image in the browser.
+ *
+ * Author: Nicolas Bachmaier
+ * Github: https://github.com/nicolasbachmaier/php-interleaved-2of5-with-checksum
+ */
 class Code128Creator
 {
     private string $initSeq = '11010000100';  // Initialization sequence for the barcode Code 128A
@@ -8,16 +17,16 @@ class Code128Creator
 
     // Barcode sequence pattern + value for Code128
 	private $barcodeSeq = [
-		"00" => ["SP", "SP", "00", "11011001100"],
-		"01" => ["!", "!", "01", "11001101100"],
-		"02" => ["\"", "\"", "02", "11001100110"],
-		"03" => ["#", "#", "03", "10010011000"],
-		"04" => ["$", "$", "04", "10010001100"],
-		"05" => ["%", "%", "05", "10001001100"],
-		"06" => ["&", "&", "06", "10011001000"],
-		"07" => ["'", "'", "07", "10011000100"],
-		"08" => ["(", "(", "08", "10001100100"],
-		"09" => [")", ")", "09", "11001001000"],
+		"0" => ["SP", "SP", "00", "11011001100"],
+		"1" => ["!", "!", "01", "11001101100"],
+		"2" => ["\"", "\"", "02", "11001100110"],
+		"3" => ["#", "#", "03", "10010011000"],
+		"4" => ["$", "$", "04", "10010001100"],
+		"5" => ["%", "%", "05", "10001001100"],
+		"6" => ["&", "&", "06", "10011001000"],
+		"7" => ["'", "'", "07", "10011000100"],
+		"8" => ["(", "(", "08", "10001100100"],
+		"9" => [")", ")", "09", "11001001000"],
 		"10" => ["*", "*", "10", "11001000100"],
 		"11" => ["+", "+", "11", "11000100100"],
 		"12" => [",", ",", "12", "10110011100"],
@@ -190,7 +199,6 @@ class Code128Creator
             $sequence .= $this->barcodeSeq[$index][3];
         }
 		
-		echo $sequence;
 		$sequence .= $this->get_code128_checksum($value).$this->termSeq;
 		
 		return $this->initSeq.$sequence;
@@ -227,9 +235,9 @@ class Code128Creator
 			imagefilledrectangle($img, $xPos, 0, $xPos+2, $this->imgHeight, $lineColor); 
 			$xPos+=2; 
 		}
-		//header("Content-Type: image/png");  // Inform the browser that we're sending an image
-		//imagepng($img);  // Output the image
-		//imagedestroy($img); // Free up memory
+		header("Content-Type: image/png");  // Inform the browser that we're sending an image
+		imagepng($img);  // Output the image
+		imagedestroy($img); // Free up memory
 	}
 }
 ?>
